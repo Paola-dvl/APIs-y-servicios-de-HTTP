@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<clientes>
+		<cliente>
+			<NIT>12345678</NIT>
+			<nombre>Christophers Ramos</nombre>
+		</cliente>
+		<cliente>
+			<NIT>44332211</NIT>
+			<nombre>Federico Gómez</nombre>
+		</cliente>
+		<cliente>
+			<NIT>Nit del Cliente: 99887766</NIT>
+			<nombre>Gabriela Morales</nombre>
+		</cliente>
+	</clientes>
+	<bancos>
+		<banco>
+			<codigo>004</codigo>
+			<nombre>Banco Internacional</nombre>
+		</banco>
+		<banco>
+			<codigo>005</codigo>
+			<nombre>Banco de la Ciudad</nombre>
+		</banco>
+		<banco>
+			<codigo>006</codigo>
+			<nombre>Banco del Norte</nombre>
+		</banco>
+	</bancos>
+</config>

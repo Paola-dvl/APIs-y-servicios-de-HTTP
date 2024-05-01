@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<clientes>
+		<cliente>
+			<NIT>NIT: 12345678</NIT>
+			<nombre>Christophers Ramos</nombre>
+		</cliente>
+		<cliente>
+			<NIT>nit: 87654321</NIT>
+			<nombre>Maria Lopez</nombre>
+		</cliente>
+		<cliente>
+			<NIT>56781234</NIT>
+			<nombre>Carlos Ruiz</nombre>
+		</cliente>
+	</clientes>
+	<bancos>
+		<banco>
+			<codigo>001</codigo>
+			<nombre>Banco Banrural</nombre>
+		</banco>
+		<banco>
+			<codigo>002</codigo>
+			<nombre>Banco Bantrab</nombre>
+		</banco>
+		<banco>
+			<codigo>003</codigo>
+			<nombre>Banco GyT</nombre>
+		</banco>
+	</bancos>
+</config>

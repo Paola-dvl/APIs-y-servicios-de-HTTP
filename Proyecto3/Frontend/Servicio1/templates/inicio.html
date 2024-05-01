@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Proyecto Paola</title>
+    <style>
+/* Estilo de los campos de selección (combobox) */
+select {
+    padding: 8px;
+    border: 1px solid #ccc; /* Borde gris */
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    width: 100%; /* Ancho completo */
+}
+
+select:focus {
+    outline: none; /* Sin contorno al enfocar */
+    border-color: #007bff; /* Cambio de color al enfocar */
+}
+
+/* Estilo de los inputs de tipo file */
+input[type="file"] {
+    padding: 8px;
+    border: 1px solid #ccc; /* Borde gris */
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    width: 100%; /* Ancho completo */
+}
+
+input[type="file"]:focus {
+    outline: none; /* Sin contorno al enfocar */
+    border-color: #007bff; /* Cambio de color al enfocar */
+}
+
+/* Estilo del texto del input de tipo file */
+.input-file-label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+        /* Estilo del cuerpo de la página */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5; /* Color de fondo */
+    color: #333; /* Color del texto */
+}
+
+/* Estilo de los encabezados */
+h1, h2, h3, h4, h5, h6 {
+    color: #444;
+}
+
+/* Estilo de los párrafos */
+p {
+    margin-bottom: 10px;
+}
+
+/* Estilo de los enlaces */
+a {
+    color: #007bff; /* Color de enlace */
+    text-decoration: none; /* Sin subrayado */
+}
+
+a:hover {
+    text-decoration: underline; /* Subrayado al pasar el ratón */
+}
+
+/* Estilo de los botones */
+button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #007bff; /* Color de fondo del botón */
+    color: #fff; /* Color del texto del botón */
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease; /* Transición suave */
+}
+
+button:hover {
+    background-color: #0056b3; /* Cambio de color al pasar el ratón */
+}
+
+/* Estilo de los campos de entrada */
+input[type="text"], input[type="email"], input[type="password"], textarea {
+    padding: 8px;
+    border: 1px solid #ccc; /* Borde gris */
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+}
+
+input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, textarea:focus {
+    outline: none; /* Sin contorno al enfocar */
+    border-color: #007bff; /* Cambio de color al enfocar */
+}
+
+/* Estilo de los elementos de formulario */
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/vfs_fonts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xml2js/0.4.23/xml2js.min.js"></script>
+
+
+</head>
+<body>
+    <br>
+    <h2>Proyecto IPC2</h2>
+    <br>
+    <br>
+    <br>
+    <input type="file" id="grabarConfiguracion_archivo" accept=".xml"><br>
+    <button onclick="grabarConfiguracion()">Grabar Configuración</button>
+    <br>
+    <br>
+    <br>
+    <input type="file" id="grabarTransaccion_archivo" accept=".xml"><br>
+    <button onclick="grabarTransaccion()">Grabar Transaccion</button>
+    <br>
+    <br>
+    <br>
+    <button onclick="limpiarDatos()">Limpiar Datos</button>
+    <br>
+    <br>
+    <br>
+    <select id="devolverEstadoCuenta_cb"></select>
+    <input id="devolverEstadoCuenta_input">
+    <button onclick="devolverEstadoCuenta()">Devolver Estado de Cuenta</button>
+    <br>
+    <br>
+    <br>
+    <input id="devolverResumenPagos_input">
+    <button onclick="devolverResumenPagos()">Devolver Resumen de Pagos</button>
+    <br>
+    <br>
+    <br>
+    <br>
+    <select id="ayudaSelect" onchange="seleccionarOpcion()">
+        <br>
+        <br>
+        <option value="documentacion">Seleccione una opción</option>
+        <option value="documentacion">Documentación</option>
+        <option value="datosEstudiante">Datos del Estudiante</option>
+    </select>
+    <div id="textoDatosEstudiante" style="display: none;">
+        <br>
+            Nombre: Maria Paola Guadalupe Dávila Valenzuela
+        <br>
+            Carnet: 202200220
+        <br>
+    </div>
+    <div id="descargarPdf" style="display: none;">
+         <a  href="https://drive.google.com/file/d/12Y6u-j4w833jpCwkr5Nla6NdQH90EYwK/view?usp=sharing"> Descargame :'0</a>
+    </div>
+      <br>
+      <br>
+      <br>
+      <br>
+        <div id="result">
+        </div>
+        <button id="button">
+    <script>
+        function seleccionarOpcion(){
+            var select = document.getElementById("ayudaSelect");
+            var opcionSeleccionada = select.value;
+            document.getElementById("textoDatosEstudiante").style.display = "none";
+            document.getElementById("descargarPdf").style.display = "none";
+            if (opcionSeleccionada === "datosEstudiante") {
+                document.getElementById("textoDatosEstudiante").style.display = "block";
+            } else if (opcionSeleccionada === "documentacion") {
+                document.getElementById("descargarPdf").style.display = "block";
+            }
+        }
+        function llenarComboBox() {
+            fetch('getClientes/')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error en servidor DJango');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data)
+                data = data.respuesta
+                const comboBox = document.getElementById("devolverEstadoCuenta_cb");
+                comboBox.innerHTML = "";
+                const option = document.createElement("option");
+                option.text = "Seleccionar todos";
+                option.value = "";
+                comboBox.add(option);
+                for (let key in data) {
+                    if (data.hasOwnProperty(key)) {
+                        const option = document.createElement("option");
+                        option.text = data[key].nombre;
+                        option.value = data[key].nit;
+                        comboBox.add(option);
+                    }
+                }
+                
+            })
+            .catch(error => {
+                alert(error);
+                console.error('Error:', error);
+            });
+        }
+        llenarComboBox();
+
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        function grabarConfiguracion(){
+            document.getElementById('result').innerHTML = '';
+            var fileInput = document.getElementById('grabarConfiguracion_archivo');
+            var file = fileInput.files[0];
+            if (!file) {
+                alert('Por favor, seleccione un archivo XML.');
+                return;
+            }
+            var formData = new FormData();
+            formData.append('xml_file', file);
+            var csrftoken = getCookie('csrftoken');
+            formData.append('csrfmiddlewaretoken', csrftoken);
+            fetch('grabarConfiguracion/', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error en servidor DJango');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data)
+                data = data.respuesta
+                if (data.estado === "error"){
+                    alert(data.mensaje)
+                } else {
+                    alert("Datos creados/actualizados con éxito")
+                    document.getElementById('result').innerHTML = '<xmp>' + data['xml'] + '</xmp>';
+                    /*
+                    var archivoBlob = new Blob([data.xml], { type: 'text/xml' });
+                    var enlaceDescarga = document.createElement('a');
+                    enlaceDescarga.href = window.URL.createObjectURL(archivoBlob);
+                    enlaceDescarga.download = 'respuesta.xml';
+                    enlaceDescarga.click();
+                    */
+                    llenarComboBox();
+                }
+            })
+            .catch(error => {
+                alert(error);
+                console.error('Error:', error);
+            });
+        }
+        
+        function grabarTransaccion(){
+            document.getElementById('result').innerHTML = '';
+            var fileInput = document.getElementById('grabarTransaccion_archivo');
+            var file = fileInput.files[0];
+            if (!file) {
+                alert('Por favor, seleccione un archivo XML.');
+                return;
+            }
+            var formData = new FormData();
+            formData.append('xml_file', file);
+            var csrftoken = getCookie('csrftoken');
+            formData.append('csrfmiddlewaretoken', csrftoken);
+            fetch('grabarTransaccion/', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error en servidor DJango');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data)
+                data = data.respuesta
+                if (data.estado === "error"){
+                    alert(data.mensaje)
+                } else {
+                    alert("Datos creados/actualizados con éxito")
+                    document.getElementById('result').innerHTML = '<xmp>' + data['xml'] + '</xmp>';
+                    /*
+                    var archivoBlob = new Blob([data.xml], { type: 'text/xml' });
+                    var enlaceDescarga = document.createElement('a');
+                    enlaceDescarga.href = window.URL.createObjectURL(archivoBlob);
+                    enlaceDescarga.download = 'respuesta.xml';
+                    enlaceDescarga.click();
+                    */
+                    llenarComboBox();
+                }
+            })
+            .catch(error => {
+                alert(error);
+                console.error('Error:', error);
+            });
+        }
+        
+        function limpiarDatos(){
+            document.getElementById('result').innerHTML = '';
+            fetch('limpiarDatos/')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error en servidor DJango');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data)
+                data = data.respuesta
+                if (data.estado === "error"){
+                    alert(data.mensaje)
+                } else {
+                    alert("Datos reseteados")
+                    location.reload();
+                    llenarComboBox();
+                }
+            })
+            .catch(error => {
+                alert(error);
+                console.error('Error:', error);
+            });
+        }
+        
+        function devolverEstadoCuenta(){
+            document.getElementById('result').innerHTML = 'Cargando...';
+            var input = document.getElementById('devolverEstadoCuenta_input').value;
+            var formData = new FormData();
+            console.log("INPUT")
+            console.log(input)
+            console.log(document.getElementById("devolverEstadoCuenta_cb").value)
+            if (input.trim() === "" || input == null){
+                const comboBox = document.getElementById("devolverEstadoCuenta_cb");
+                formData.append('nit', comboBox.value);
+            }
+            else {
+                formData.append('nit', input);
+            }
+            var csrftoken = getCookie('csrftoken');
+            formData.append('csrfmiddlewaretoken', csrftoken);
+            fetch('devolverEstadoCuenta/', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error en servidor DJango');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data)
+                alert("Datos solicitados con éxito")
+                document.getElementById('result').innerHTML = '<xmp>' + data + '</xmp>';
+
+                var Tab = 0;
+                var lineas = [];
+                var lineasOriginales = data.split('>');
+                lineasOriginales.forEach(function(linea) {
+                    var nuevaLinea = linea + '>\n' + '\t'.repeat(Tab);
+                    lineas.push(nuevaLinea);
+                    for (var i = 0; i < linea.length; i++) {
+                        if (linea[i] === '>') {
+                            Tab++;
+                        } else if (linea[i] === '<') {
+                            Tab = Math.max(0, Tab - 1);
+                        }
+                    }
+                });
+                var doc = new jsPDF();
+                var margenSuperior = 10;
+                var y = margenSuperior;
+                lineas.forEach(function(linea, indice) {
+                    var lineHeight = doc.getTextDimensions(linea).h;
+                    if (y + lineHeight > 235) {
+                        // Si la línea no cabe, agregar una nueva página
+                        doc.addPage();
+                        // Restablecer la posición vertical
+                        y = margenSuperior;
+                    }
+                    
+                    // Agregar la línea al PDF
+                    doc.text(linea, 10, y);
+                    
+                    // Actualizar la posición vertical para la siguiente línea
+                    y += lineHeight;
+                });
+    
+                doc.save('EstadoDeCuenta.pdf');
+
+
+
+
+
+
+
+
+                llenarComboBox();
+            })
+            .catch(error => {
+                alert(error);
+                console.error('Error:', error);
+            });
+        }
+         
+        function devolverResumenPagos(){
+            document.getElementById('result').innerHTML = '';
+            var input = document.getElementById('devolverResumenPagos_input').value;
+            var formData = new FormData();
+            formData.append('fecha', input);
+            var csrftoken = getCookie('csrftoken');
+            formData.append('csrfmiddlewaretoken', csrftoken);
+            fetch('devolverResumenPagos/', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error en servidor DJango');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data)
+                if (typeof data !== "string"){
+                    alert("Error, ingrese una fecha válida")
+                }else{
+                    alert("Datos solicitados con éxito")
+                    const parser = new DOMParser();
+                    const xmlDoc = parser.parseFromString(data, 'text/xml');
+                    const respuesta = xmlDoc.querySelector('respuesta');
+                    document.getElementById('result').innerHTML = '<xmp>' + data + '</xmp>';
+                    console.log(xmlDoc)
+                    console.log(respuesta)
+                    const meses = [];
+                    const codigos = [];
+                    xmlDoc.childNodes[0].childNodes.forEach((codigo) => {
+                        console.log("CODIGO!!! " + codigo.nodeName)
+                        const codigoId = codigo.nodeName;
+                        codigos.push(codigoId);
+                        codigo.childNodes.forEach((mes) => {
+                            const mesNombre = mes.nodeName;
+                            const valor = parseInt(mes.textContent);
+                            const indice = meses.findIndex((element) => element.mes === mesNombre);
+                            if (indice === -1) {
+                            meses.push({ mes: mesNombre, [codigoId]: valor });
+                            } else {
+                            meses[indice][codigoId] = valor;
+                            }
+                        });
+                    });
+
+                    // Preparar los datos para Chart.js
+                    const labels = meses.map((mes) => mes.mes);
+                    const datasets = codigos.map((codigo) => ({
+                    label: codigo,
+                    data: meses.map((mes) => mes[codigo]),
+                    backgroundColor: '#' + Math.random().toString(16).slice(2, 8) // Color aleatorio
+                    }));
+
+                    console.log(datasets)
+                    console.log(labels)
+                    var canvasExistente = document.getElementById('grafica_');
+                    if (canvasExistente) {
+                        canvasExistente.parentNode.removeChild(canvasExistente);
+                    }
+                    var canvas = document.createElement('canvas');
+                    canvas.id = 'grafica_';
+                    canvas.width = 400;
+                    canvas.height = 400;
+                    document.body.appendChild(canvas);
+                    crearGraficaColumnas(datasets, labels)
+
+
+                    var exportButton = document.getElementById('button');
+                    exportButton.textContent = 'Exportar a PDF';
+                    exportButton.addEventListener('click', exportToPDF);
+                    document.body.appendChild(exportButton);
+                    llenarComboBox();
+                }
+            })
+            .catch(error => {
+                alert(error);
+                console.error('Error:', error);
+            });
+        }  
+
+        function exportToPDF(){
+            const pdf = new jsPDF();
+            pdf.text('Gráfico de Barras', 10, 10);
+            const canvas = document.getElementById('grafica_');
+            const canvasImg = canvas.toDataURL('image/png', 1.0);
+            pdf.addImage(canvasImg, 'PNG', 10, 20, 180, 100);
+            pdf.save('grafico.pdf');
+        };
+
+        function crearGraficaColumnas(datasets, labels) {
+            var ctx = document.getElementById('grafica_').getContext('2d');
+            var chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: datasets
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

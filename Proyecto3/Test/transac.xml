@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<transacciones>
+    <facturas>
+        <factura>
+            <numeroFactura>F12345</numeroFactura>
+            <NITcliente>12345678</NITcliente>
+            <fecha>Argentina, Jueves 15/04/2024</fecha>
+            <valor>2500.50</valor>
+        </factura>
+        <factura>
+            <numeroFactura>F12346</numeroFactura>
+            <NITcliente>12345678</NITcliente>
+            <fecha>Ecuador, Lunes 16/04/2024</fecha>
+            <valor>3200.00</valor>
+        </factura>
+        <factura>
+            <numeroFactura>F12347</numeroFactura>
+            <NITcliente>87654321</NITcliente>
+            <fecha>17/04/2024</fecha>
+            <valor>4500.75</valor>
+        </factura>
+    </facturas>
+    <pagos>
+        <pago>
+            <codigoBanco>101</codigoBanco>
+            <fecha>28/04/2024</fecha>
+            <NITcliente>12345678</NITcliente>
+            <valor>2500.50</valor>
+        </pago>
+        <pago>
+            <codigoBanco>001</codigoBanco>
+            <fecha>19/04/2024</fecha>
+            <NITcliente>12345678</NITcliente>
+            <valor>3200.00</valor>
+        </pago>
+        <pago>
+            <codigoBanco>103</codigoBanco>
+            <fecha>20/04/2024</fecha>
+            <NITcliente>12345678</NITcliente>
+            <valor>4500.0</valor>
+        </pago>
+    </pagos>
+</transacciones>
+
